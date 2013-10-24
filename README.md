@@ -51,5 +51,5 @@ Screen Shots
 Change Log
 ========
 
-* Version 1.0 - First release. * may need to work on some of the DTP codes/modes with more testing.
+* Version 1.0 - First release. * it may need to work on some of the DTP codes/modes with more testing.
 
