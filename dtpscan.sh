@@ -15,7 +15,7 @@ VERSION="1.0"
 
 clear
 echo -e "\e[00;32m########################################################\e[00m"
-echo "***   DTPScan - The VLAN DTP SCanner $VERSION  ***"
+echo "***   DTPScan - The VLAN DTP Scanner $VERSION  ***"
 echo ""
 echo "***   Detects DTP modes for VLAN Hopping (Passive) ***"
 echo -e "\e[00;32m########################################################\e[00m"
