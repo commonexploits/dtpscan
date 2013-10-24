@@ -40,11 +40,6 @@ Features
 Screen Shots
 ========
 
-![](http://commonexploits.com/wp-content/uploads/2013/10/dtp1.jpg)
-
-![](http://commonexploits.com/wp-content/uploads/2013/10/dtp2.jpg)
-
-![](http://commonexploits.com/wp-content/uploads/2013/10/dtp3.jpg)
 
 
 
