@@ -17,7 +17,7 @@ clear
 echo -e "\e[00;32m########################################################\e[00m"
 echo "***   DTPScan - The VLAN DTP SCanner $VERSION  ***"
 echo ""
-echo "***   Detects DTP modes for VLAN Hopping ***"
+echo "***   Detects DTP modes for VLAN Hopping (Passive) ***"
 echo -e "\e[00;32m########################################################\e[00m"
 
 #Check for tshark
@@ -134,7 +134,7 @@ DTPMODE=$(cat dtp.tmp |grep -o "Status: 0x.*" |awk '{ print $NF }' | sort --uniq
 			echo -e "\e[01;32m[+]\e[00m DTP was found enabled in mode 'switchport mode access'."
 			echo ""
 			echo -e "\e[01;31m[!]\e[00m DTP VLAN attacks will not be possible."
-
+			echo ""
 	fi
 
 rm dtp.tmp 2>/dev/null
