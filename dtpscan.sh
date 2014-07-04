@@ -7,15 +7,15 @@
 # 13/10/2013
 # Requires tshark
 # Tested on Bactrack 5 and Kali with Cisco devices
-# Version 1.0 - soon will be integrated into Froger version 2.
+# Version 1.2 - soon will be integrated into Frogger version 2. updated to fix changes in tshark
 
 
 DTPSEC="90" # number of seconds to sniff for DTP. Suggest 90 as packets are sent every 30-60 seconds depending on the DTP mode.
-VERSION="1.1"
+VERSION="1.2"
 
 clear
 echo -e "\e[00;32m########################################################\e[00m"
-echo "***   DTPScan - The VLAN DTP Scanner $VERSION  ***"
+echo "***   DTPScan - The VLAN DTP SCanner $VERSION  ***"
 echo ""
 echo "***   Detects DTP modes for VLAN Hopping (Passive) ***"
 echo -e "\e[00;32m########################################################\e[00m"
@@ -55,87 +55,87 @@ echo ""
 echo -e "\e[01;32m[-]\e[00m Now Sniffing DTP packets on interface $INT for "$DTPSEC" seconds."
 echo ""
 
-tshark -a duration:$DTPSEC -i $INT -R "dtp" -x -V >dtp.tmp 2>&1
+tshark -a duration:$DTPSEC -i $INT -Y "dtp" -x -V >dtp.tmp 2>&1
+COUNTDTP=$(cat dtp.tmp |grep "dtp" |wc -l)
 
-cat dtp.tmp |grep "0 packets captured" >/dev/null
-
-if [ $? = 0 ]
+if [ $COUNTDTP = 0 ]
 
 	then
 			echo ""
-			echo -e "\e[01;31m[!]\e[00m I didn't find any DTP packets. DTP is probably in 'switchport mode access' or 'switchport nonegotiate' modes."
+			echo -e "\e[01;31m[!]\e[00m No DTP packets were. DTP is probably disabled with 'switchport nonegotiate' mode."
 			echo ""
-			echo -e "\e[01;31m[!]\e[00m DTP VLAN attacks will not be possible."
+			echo -e "\e[01;31m[!]\e[00m DTP VLAN attacks will not be possible from this port."
+			echo ""
+			echo -e "\e[01;33m[-]\e[00m Note: This attack is port specific and only applies to the port you are connected to. It does  not represent all ports on the device."
 			echo ""
 			rm dtp.tmp 2>/dev/null
 			exit 0
-fi
-
+else
 
 DTPMODE=$(cat dtp.tmp |grep -o "Status: 0x.*" |awk '{ print $NF }' | sort --unique |head -1)
 	if [ $DTPMODE = "0x03" ]
 		then
 			echo ""
-			echo -e "\e[01;32m[+]\e[00m The switch port was found enabled in it's default state of 'Auto'."
+			echo -e "\e[01;32m[+]\e[00m DTP was found enabled in it's default state of 'Auto'."
 			echo ""
-			echo -e "\e[01;32m[+]\e[00m DTP VLAN hopping will be possible."
+			echo -e "\e[01;32m[+]\e[00m VLAN hopping will be possible."
 			echo ""
 
 	elif [ $DTPMODE = "0x83" ]
 		then
 			echo ""
-			echo -e "\e[01;32m[+]\e[00m The switch port was enabled in mode 'switchport mode dynamic desirable'."
+			echo -e "\e[01;32m[+]\e[00m DTP was found enabled in mode 'switchport mode dynamic desirable'."
 			echo ""
-			echo -e "\e[01;32m[+]\e[00m DTP VLAN hopping should be possible."
+			echo -e "\e[01;32m[+]\e[00m VLAN hopping should be possible."
 			echo ""
 
 	elif [ $DTPMODE = "0x04" ]
 		then
 			echo ""
-			echo -e "\e[01;32m[+]\e[00m The switch port was found enabled in mode 'switchport mode dynamic desirable'."
+			echo -e "\e[01;32m[+]\e[00m DTP was found enabled in mode 'switchport mode dynamic desirable'."
 			echo ""
-			echo -e "\e[01;32m[+]\e[00m DTP VLAN hopping should be possible."
+			echo -e "\e[01;32m[+]\e[00m VLAN hopping should be possible."
 			echo ""
 
 	elif [ $DTPMODE = "0x81" ]
 		then
 			echo ""
-			echo -e "\e[01;32m[+]\e[00m The switch port was found enabled in Trunk mode 'switchport mode trunk'."
+			echo -e "\e[01;32m[+]\e[00m DTP was found enabled in Trunk mode 'switchport mode trunk'."
 			echo ""
-			echo -e "\e[01;33m[-]\e[00m DTP is not enabled, but the port is a trunk so you should see all VLANs without any attack."
+			echo -e "\e[01;31m[!]\e[00m DTP VLAN attacks will not be possible."
 			echo ""
 	elif [ $DTPMODE = "0xa5" ]
 		then
 			echo ""
-			echo -e "\e[01;32m[+]\e[00m The switch port was found enabled in Trunk mode 'switchport mode trunk 802.1Q'. with 802.1Q encapsulation forced"
+			echo -e "\e[01;32m[+]\e[00m DTP was found enabled in Trunk mode 'switchport mode trunk 802.1Q'. with 802.1Q encapsulation forced"
 			echo ""
-			echo -e "\e[01;33m[-]\e[00m DTP is not enabled, but the port is a trunk so you should see all VLANs without any attack."
+			echo -e "\e[01;31m[!]\e[00m DTP VLAN attacks will not be possible."
 			echo ""
 
 	elif [ $DTPMODE = "0x42" ]
 		then
 			echo ""
-			echo -e "\e[01;32m[+]\e[00m The switch port was found enabled in Trunk mode 'switchport mode trunk ISL'. with ISL encapsulation forced"
+			echo -e "\e[01;32m[+]\e[00m DTP was found enabled in Trunk mode 'switchport mode trunk ISL'. with ISL encapsulation forced"
 			echo ""
-			echo -e "\e[01;33m[-]\e[00m DTP is not enabled, but the port is a trunk so you should see all VLANs without any attack"
+			echo -e "\e[01;31m[!]\e[00m DTP VLAN attacks will not be possible."
 			echo ""
 
 	elif [ $DTPMODE = "0x84" ]
 		then
 			echo ""
-			echo -e "\e[01;32m[+]\e[00m The switch port was found enabled in mode 'switchport mode dynamic auto'."
+			echo -e "\e[01;32m[+]\e[00m DTP was found enabled in mode 'switchport mode dynamic auto'."
 			echo ""
-			echo -e "\e[01;32m[+]\e[00m DTP VLAN hopping should be possible."
+			echo -e "\e[01;32m[+]\e[00m VLAN hopping should be possible."
 			echo ""
 
 	elif [ $DTPMODE = "0x02" ]
 		then
 			echo ""
-			echo -e "\e[01;32m[+]\e[00m The switch port was found enabled in mode 'switchport mode access'."
+			echo -e "\e[01;32m[+]\e[00m DTP was found enabled in mode 'switchport mode access'."
 			echo ""
 			echo -e "\e[01;31m[!]\e[00m DTP VLAN attacks will not be possible."
 			echo ""
 	fi
-
+fi
 rm dtp.tmp 2>/dev/null
 exit 0
