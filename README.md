@@ -49,7 +49,7 @@ Screen Shots
 
 Change Log
 ========
+* Version 1.3 - Small message typo in output fixed.
 * Version 1.2 - Fixed script. Updates to tshark caused script to break. 
 * Version 1.1 - Updated working
 * Version 1.0 - First release. * it may need to work on some of the DTP codes/modes with more testing.
-

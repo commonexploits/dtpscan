@@ -7,11 +7,11 @@
 # 13/10/2013
 # Requires tshark
 # Tested on Bactrack 5 and Kali with Cisco devices
-# Version 1.2 - soon will be integrated into Frogger version 2. updated to fix changes in tshark
+# Version 1.3 - soon will be integrated into Frogger version 2. updated to fix changes in tshark
 
 
 DTPSEC="90" # number of seconds to sniff for DTP. Suggest 90 as packets are sent every 30-60 seconds depending on the DTP mode.
-VERSION="1.2"
+VERSION="1.3"
 
 clear
 echo -e "\e[00;32m########################################################\e[00m"
@@ -62,7 +62,7 @@ if [ $COUNTDTP = 0 ]
 
 	then
 			echo ""
-			echo -e "\e[01;31m[!]\e[00m No DTP packets were. DTP is probably disabled with 'switchport nonegotiate' mode."
+			echo -e "\e[01;31m[!]\e[00m No DTP packets were found. DTP is probably disabled and in 'switchport nonegotiate' mode."
 			echo ""
 			echo -e "\e[01;31m[!]\e[00m DTP VLAN attacks will not be possible from this port."
 			echo ""
